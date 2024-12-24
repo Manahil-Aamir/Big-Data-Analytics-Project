@@ -2,8 +2,8 @@ import kagglehub
 import os
 import shutil
 
-# Desired output directory
-output_dir = r"D:/Docker/Hadoop/Big-Data-Analytics-Project/data"
+# Ask user for the desired output directory
+output_dir = input("Please enter the desired output directory: ")
 
 # Download dataset
 dataset_path = kagglehub.dataset_download("bytadit/transactional-ecommerce")
