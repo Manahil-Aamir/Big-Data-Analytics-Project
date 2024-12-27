@@ -1,0 +1,46 @@
+{
+    "type": "record",
+    "name": "product_schema",
+    "fields": [
+        {
+            "name": "id",
+            "type": "double"
+        },
+        {
+            "name": "gender",
+            "type": "string"
+        },
+        {
+            "name": "masterCategory",
+            "type": "string"
+        },
+        {
+            "name": "subCategory",
+            "type": "string"
+        },
+        {
+            "name": "articleType",
+            "type": "string"
+        },
+        {
+            "name": "baseColour",
+            "type": "string"
+        },
+        {
+            "name": "season",
+            "type": "string"
+        },
+        {
+            "name": "year",
+            "type": "double"
+        },
+        {
+            "name": "usage",
+            "type": "string"
+        },
+        {
+            "name": "productDisplayName",
+            "type": "string"
+        }
+    ]
+}

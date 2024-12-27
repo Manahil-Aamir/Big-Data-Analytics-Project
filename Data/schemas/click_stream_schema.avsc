@@ -1,0 +1,30 @@
+{
+    "type": "record",
+    "name": "click_stream_schema",
+    "fields": [
+        {
+            "name": "session_id",
+            "type": "string"
+        },
+        {
+            "name": "event_name",
+            "type": "string"
+        },
+        {
+            "name": "event_time",
+            "type": "string"
+        },
+        {
+            "name": "event_id",
+            "type": "string"
+        },
+        {
+            "name": "traffic_source",
+            "type": "string"
+        },
+        {
+            "name": "event_metadata",
+            "type": "string"
+        }
+    ]
+}
