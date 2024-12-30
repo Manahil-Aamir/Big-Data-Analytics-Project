@@ -1,0 +1,21 @@
+Kafka:
+-run Data/breaking.py and provide link t click_stream.csv
+-copy that folder to docker-kafka-sc6-kafka-1-1/app/
+-copy the Data/schemas folder to docker-kafka-sc6-kafka-1-1/app/
+-copy Ingestion/real-time.py to docker-kafka-sc6-kafka-1-1/app/
+-docker exec -u root -it docker-kafka-sc6-kafka-1-1 sh
+-create python environment and install python (name ur virtual env myenv)
+-. /myenv/bin/activate
+- python app/real-time.py
+
+Spark:
+-copy the Data/schemas to spark-master:/home/
+-copy the consumer.py to spark-master:/
+-execute
+-export SPARK_HOME=/spark  # Or the correct path
+export PATH=$SPARK_HOME/bin:$PATH
+export PYSPARK_PYTHON=/usr/bin/python3  # Path to the new Python
+-spark-submit \
+  --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0 \
+  consumer.py
+
