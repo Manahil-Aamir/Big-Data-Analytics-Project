@@ -40,35 +40,35 @@ public class ClickstreamToHBase {
                     while ((line = br.readLine()) != null) {
                         // Step 6: Read each row of data (split by comma-separated values)
                         String[] values = line.split(",", -1); // Use -1 to retain empty strings
-                        if (values.length < 6) {
-                            System.err.println("Skipping invalid row #" + rowNumber + ": " + line); // Debug: Print skipped row
-                            rowNumber++;
-                            continue; // Skip invalid rows
-                        }
 
-                        // Step 7: Use 'session_id' (first column) as the row key
-                        String rowKey = values[0];
+                        // Step 7: Handle missing or incomplete rows by assigning default values
+                        String sessionId = values.length > 0 ? values[0] : "UNKNOWN_SESSION";
+                        String eventName = values.length > 1 ? values[1] : "UNKNOWN_EVENT";
+                        String eventTime = values.length > 2 ? values[2] : "1970-01-01T00:00:00Z";
+                        String eventId = values.length > 3 ? values[3] : "UNKNOWN_EVENT_ID";
+                        String trafficSource = values.length > 4 ? values[4] : "UNKNOWN_SOURCE";
+                        String eventMetadata = values.length > 5 && !values[5].isEmpty() ? values[5] : "event";
 
-                        // Step 8: Create a new Put operation for this row
-                        Put put = new Put(Bytes.toBytes(rowKey));
+                        // Step 8: Create a new Put operation for this row using the session ID as the row key
+                        Put put = new Put(Bytes.toBytes(sessionId));
 
                         // Step 9: Add columns for the 'event_details' column family
-                        put.addColumn(Bytes.toBytes("event_details"), Bytes.toBytes("event_name"), Bytes.toBytes(values[1]));
-                        put.addColumn(Bytes.toBytes("event_details"), Bytes.toBytes("event_time"), Bytes.toBytes(values[2]));
-                        put.addColumn(Bytes.toBytes("event_details"), Bytes.toBytes("event_id"), Bytes.toBytes(values[3]));
+                        put.addColumn(Bytes.toBytes("event_details"), Bytes.toBytes("event_name"), Bytes.toBytes(eventName));
+                        put.addColumn(Bytes.toBytes("event_details"), Bytes.toBytes("event_time"), Bytes.toBytes(eventTime));
+                        put.addColumn(Bytes.toBytes("event_details"), Bytes.toBytes("event_id"), Bytes.toBytes(eventId));
 
                         // Step 10: Add columns for the 'traffic_info' column family
-                        put.addColumn(Bytes.toBytes("traffic_info"), Bytes.toBytes("traffic_source"), Bytes.toBytes(values[4]));
+                        put.addColumn(Bytes.toBytes("traffic_info"), Bytes.toBytes("traffic_source"), Bytes.toBytes(trafficSource));
 
                         // Step 11: Add columns for the 'metadata' column family
-                        put.addColumn(Bytes.toBytes("metadata"), Bytes.toBytes("event_metadata"), Bytes.toBytes(values[5]));
+                        put.addColumn(Bytes.toBytes("metadata"), Bytes.toBytes("event_metadata"), Bytes.toBytes(eventMetadata));
 
                         // Step 12: Add this Put operation to the batch list
                         puts.add(put);
 
                         // Step 13: If batch size reaches 1000, insert the batch into HBase
                         if (puts.size() >= 10000) {
-                            System.out.println("Inserting batch of 1000 rows."); // Debug: Notify about batch insertion
+                            System.out.println("Inserting batch of 10000 rows."); // Debug: Notify about batch insertion
                             table.put(puts);
                             puts.clear(); // Clear the list for the next batch
                         }
