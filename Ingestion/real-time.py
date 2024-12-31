@@ -71,14 +71,21 @@ def stream_from_chunks(chunk_folder, producer, schema, row_interval=1):
             field_name = field['name']
             field_type = field['type']
         
-        # Handle missing values for nullable fields
-        if field_name not in random_row:
-            if "null" in field_type:
-                random_row[field_name] = None  # Set to None only if the field is nullable
-            else:
-                print(f"Missing non-nullable field: {field_name}, skipping row.")
-                return  # Skip the row if a non-nullable field is missing
+            # Handle missing values for nullable fields
+            if field_name not in random_row:
+                if "null" in field_type:
+                    random_row[field_name] = None  # Set to None only if the field is nullable
+                else:
+                    print(f"Missing non-nullable field: {field_name}, skipping row.")
+                    return  # Skip the row if a non-nullable field is missing
 
+            # Handle specific logic for event_metadata and float/empty fields
+            if "event_metadata" in field_name:
+                value = random_row.get(field_name)
+                
+                # If the value is empty or None, or if it's a float type, set to None
+                if value in [None, '', 'null'] or isinstance(value, float):
+                    random_row[field_name] = None  # Set float or empty values to None
 
             # Ensure the field value matches the expected type (e.g., converting to string if necessary)
             if field_type == 'string' and field_name in random_row and random_row[field_name] is not None:
@@ -104,6 +111,7 @@ def stream_from_chunks(chunk_folder, producer, schema, row_interval=1):
         print(f"Error in topic {topic}: {e}")
     finally:
         producer.flush()  # Ensure all messages are sent before exiting
+
 
 
 # Function to stream random rows continuously from a CSV file

@@ -4,33 +4,29 @@
   "fields": [
     {
       "name": "session_id",
-      "type": ["string", "null"],
-      "default": null
+      "type": "string",
+      "default": ""
     },
     {
       "name": "event_name",
-      "type": ["string", "null"],
-      "default": null
+      "type": "string"
     },
     {
       "name": "event_time",
-      "type": ["string", "null"],
-      "default": null
+      "type": "string"
     },
     {
       "name": "event_id",
-      "type": ["string", "null"],
-      "default": null
+      "type": "string"
     },
     {
       "name": "traffic_source",
-      "type": ["string", "null"],
-      "default": null
+      "type": "string"
     },
     {
       "name": "event_metadata",
       "type": ["string", "null"],
-      "default": null
+      "default": ""
     }
   ]
 }
