@@ -1,0 +1,124 @@
+services:
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    container_name: my-namenode
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 50070:50070
+    networks:
+      - bda_network
+    restart: always
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    container_name: my-datanode
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "my-namenode:50070"
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 50075:50075
+    networks:
+      - bda_network
+    restart: always
+
+  resourcemanager:
+    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop2.7.4-java8
+    container_name: my-resourcemanager
+    environment:
+      SERVICE_PRECONDITION: "my-namenode:50070 my-datanode:50075"
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 8086:8088
+    networks:
+      - bda_network
+    restart: always
+
+  nodemanager:
+    image: bde2020/hadoop-nodemanager:2.0.0-hadoop2.7.4-java8
+    container_name: my-nodemanager
+    environment:
+      SERVICE_PRECONDITION: "my-namenode:50070 my-datanode:50075 my-resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 8043:8042
+    networks:
+      - bda_network
+    restart: always
+
+  historyserver:
+    image: bde2020/hadoop-historyserver:2.0.0-hadoop2.7.4-java8
+    container_name: my-historyserver
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    environment:
+      SERVICE_PRECONDITION: "my-namenode:50070 my-datanode:50075 my-resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 8186:8188
+    networks:
+      - bda_network
+    restart: always
+
+  zoo:
+    image: zookeeper:3.4.10
+    container_name: my-zoo
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888
+    ports:
+      - 2181:2181
+    networks:
+      - bda_network
+    restart: always
+
+  hbase-master:
+    image: bde2020/hbase-master:1.0.0-hbase1.2.6
+    container_name: my-hbase-master
+    hostname: hbase-master
+    env_file:
+      - ./hbase-distributed-local.env
+    environment:
+      SERVICE_PRECONDITION: "my-namenode:50070 my-datanode:50075 my-zoo:2181"   
+      HBASE_THRIFT_PORT: 9090  # Ensure Thrift server port is configured   
+    ports:
+      - 16010:16010
+      - 9090:9090
+    networks:
+      - bda_network
+    restart: always
+
+  hbase-regionserver:
+    image: bde2020/hbase-regionserver:1.0.0-hbase1.2.6
+    container_name: my-hbase-regionserver
+    hostname: hbase-regionserver
+    env_file:
+      - ./hbase-distributed-local.env
+    environment:
+      HBASE_CONF_hbase_regionserver_hostname: my-hbase-regionserver
+      SERVICE_PRECONDITION: "my-namenode:50070 my-datanode:50075 my-zoo:2181 my-hbase-master:16010"
+    ports:
+      - 16030:16030
+    networks:
+      - bda_network
+    restart: always
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  hadoop_historyserver:
+
+networks:
+  bda_network:
+    driver: bridge
+    name: bda_network

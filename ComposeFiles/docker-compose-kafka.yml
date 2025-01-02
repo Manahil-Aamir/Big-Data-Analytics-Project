@@ -1,0 +1,99 @@
+version: "3.8"  # Use a more current version
+
+services:
+  sc6_zoo_1:
+    image: "bitnami/zookeeper"
+    ports:
+      - "31200:31200"
+      - "31201:31201"
+      - "31202:31202"
+    container_name: sc6_zoo_1
+    hostname: "sc6_zoo_1"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes  # Allow anonymous login to Zookeeper
+    networks:
+      - bda_network
+    restart: always
+
+  sc6_zoo_2:
+    image: "bitnami/zookeeper"
+    ports:
+      - "31300:31200"
+      - "31301:31201"
+      - "31302:31202"
+    container_name: sc6_zoo_2
+    hostname: "sc6_zoo_2"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes  # Allow anonymous login to Zookeeper
+    networks:
+      - bda_network
+    restart: always
+
+  sc6_zoo_3:
+    image: "bitnami/zookeeper"
+    ports:
+      - "31400:31200"
+      - "31401:31201"
+      - "31402:31202"
+    container_name: sc6_zoo_3
+    hostname: "sc6_zoo_3"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes  # Allow anonymous login to Zookeeper
+    networks:
+      - bda_network
+    restart: always
+
+  # Kafka Instances
+  sc6-kafka-1:
+    image: "bitnami/kafka"
+    depends_on:
+      - sc6_zoo_1
+      - sc6_zoo_2
+      - sc6_zoo_3
+    ports:
+      - "9093:9092"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=sc6_zoo_1:2181,sc6_zoo_2:2181,sc6_zoo_3:2181
+      - KAFKA_BROKER_ID=1  # Unique broker ID for this instance
+    hostname: "sc6-kafka-1"
+    networks:
+      - bda_network
+    restart: always
+
+  sc6-kafka-2:
+    image: "bitnami/kafka"
+    depends_on:
+      - sc6_zoo_1
+      - sc6_zoo_2
+      - sc6_zoo_3
+    ports:
+      - "9094:9092"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=sc6_zoo_1:2181,sc6_zoo_2:2181,sc6_zoo_3:2181
+      - KAFKA_BROKER_ID=2  # Unique broker ID for this instance
+    hostname: "sc6-kafka-2"
+    networks:
+      - bda_network
+    restart: always
+
+  sc6-kafka-3:
+    image: "bitnami/kafka"
+    depends_on:
+      - sc6_zoo_1
+      - sc6_zoo_2
+      - sc6_zoo_3
+    ports:
+      - "9095:9092"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=sc6_zoo_1:2181,sc6_zoo_2:2181,sc6_zoo_3:2181
+      - KAFKA_BROKER_ID=3  # Unique broker ID for this instance
+    hostname: "sc6-kafka-3"
+    networks:
+      - bda_network
+    restart: always
+
+# Networks
+networks:
+  bda_network:
+    driver: bridge
+    name: bda_network
