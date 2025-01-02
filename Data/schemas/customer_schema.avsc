@@ -1,0 +1,66 @@
+{
+    "type": "record",
+    "name": "customer_schema",
+    "fields": [
+        {
+            "name": "customer_id",
+            "type": "double"
+        },
+        {
+            "name": "first_name",
+            "type": "string"
+        },
+        {
+            "name": "last_name",
+            "type": "string"
+        },
+        {
+            "name": "username",
+            "type": "string"
+        },
+        {
+            "name": "email",
+            "type": "string"
+        },
+        {
+            "name": "gender",
+            "type": "string"
+        },
+        {
+            "name": "birthdate",
+            "type": "string"
+        },
+        {
+            "name": "device_type",
+            "type": "string"
+        },
+        {
+            "name": "device_id",
+            "type": "string"
+        },
+        {
+            "name": "device_version",
+            "type": "string"
+        },
+        {
+            "name": "home_location_lat",
+            "type": "double"
+        },
+        {
+            "name": "home_location_long",
+            "type": "double"
+        },
+        {
+            "name": "home_location",
+            "type": "string"
+        },
+        {
+            "name": "home_country",
+            "type": "string"
+        },
+        {
+            "name": "first_join_date",
+            "type": "string"
+        }
+    ]
+}

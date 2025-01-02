@@ -1,0 +1,62 @@
+{
+    "type": "record",
+    "name": "transactions_schema",
+    "fields": [
+        {
+            "name": "created_at",
+            "type": "string"
+        },
+        {
+            "name": "customer_id",
+            "type": "double"
+        },
+        {
+            "name": "booking_id",
+            "type": "string"
+        },
+        {
+            "name": "session_id",
+            "type": "string"
+        },
+        {
+            "name": "product_metadata",
+            "type": "string"
+        },
+        {
+            "name": "payment_method",
+            "type": "string"
+        },
+        {
+            "name": "payment_status",
+            "type": "string"
+        },
+        {
+            "name": "promo_amount",
+            "type": "double"
+        },
+        {
+            "name": "promo_code",
+            "type": "string"
+        },
+        {
+            "name": "shipment_fee",
+            "type": "double"
+        },
+        {
+            "name": "shipment_date_limit",
+            "type": "string"
+        },
+        {
+            "name": "shipment_location_lat",
+            "type": "double"
+        },
+        {
+            "name": "shipment_location_long",
+            "type": "double"
+        },
+        {
+            "name": "total_amount",
+            "type": "double"
+        }
+    ]
+}
