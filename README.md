@@ -12,7 +12,7 @@
 
 ### 3. Airflow Architecture: 
 
-![Airflow Architecture](airflow_arch.png)
+![Airflow Architecture](airflow_arch_final.jpg)
 
 # Architecture 1 : Analytics Using HBase Bulk Loading & Kafka Real Streaming Data
 
