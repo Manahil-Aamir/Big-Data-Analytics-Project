@@ -7,7 +7,6 @@ spark = SparkSession.builder \
     .appName("Customer Data Processing") \
     .getOrCreate()
 
-
 # Define the schema for your JSON data
 schema = StructType([
     StructField("customer_id", DoubleType(), True),
